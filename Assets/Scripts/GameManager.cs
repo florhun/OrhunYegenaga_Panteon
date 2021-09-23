@@ -4,31 +4,37 @@ using UnityEngine;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    public enum GameState 
+    public enum GameState
     {
         Prepare,
-        MainGame,
-        Jumping,
+        Task1,
+        Task2,
+        Task3,
         FinishGame,
     }
-    [SerializeField] private GameState _currentGameState;
+
+    [SerializeField] private GameState currentGameState;
+
     public GameState CurrentGameState
     {
-        get { return _currentGameState;}
+        get { return currentGameState; }
         set
         {
             switch (value)
             {
                 case GameState.Prepare:
                     break;
-                case GameState.MainGame:                       
+                case GameState.Task1:
                     break;
-                case GameState.Jumping:
+                case GameState.Task2:
                     break;
-                case GameState.FinishGame:                        
+                case GameState.Task3:
+                    break;
+                case GameState.FinishGame:
                     break;
             }
-            _currentGameState = value;
-        }           
+
+            currentGameState = value;
+        }
     }
 }
