@@ -8,6 +8,9 @@ TagManager:
   - Donut
   - Platform
   - Stationary
+  - Wall
+  - Task1
+  - FinishLine
   layers:
   - Default
   - TransparentFX

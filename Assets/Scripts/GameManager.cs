@@ -10,6 +10,7 @@ public class GameManager : MonoSingleton<GameManager>
         Task1,
         Task2,
         Task3,
+        Transition,
         FinishGame,
     }
 

@@ -11,6 +11,7 @@ public class InputManager : MonoSingleton<InputManager>
     private static Vector2 _startTouch;
     private Vector2 _swipeDelta;
     private PlayerController _pc;
+    private bool _isMoving;
 
 
     private static readonly int Run = Animator.StringToHash("Run");
@@ -35,12 +36,18 @@ public class InputManager : MonoSingleton<InputManager>
         if (Input.GetMouseButton(0))
         {
             _swipeDelta = (new Vector2(Input.mousePosition.x, Input.mousePosition.y) - _startTouch).normalized;
+
+            if (_swipeDelta.magnitude > .2f)
+            {
+                PlayerController.isMoving = true;
+            }
             StartCoroutine(MoveToTarget(_swipeDelta.x, _swipeDelta.y, speed, platformWidth * Math.Sign(_swipeDelta.x)));
             SetRotation();
         }
 
         if (Input.GetMouseButtonUp(0))
         {
+            PlayerController.isMoving = false;
             _swipeDelta = Vector2.zero;
             _pc.animator.SetTrigger(Idle);
         }
