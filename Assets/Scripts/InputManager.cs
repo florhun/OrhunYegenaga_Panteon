@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Input Manager 
 public class InputManager : MonoSingleton<InputManager>
 {
     [SerializeField] private Transform player;
@@ -37,17 +38,13 @@ public class InputManager : MonoSingleton<InputManager>
         {
             _swipeDelta = (new Vector2(Input.mousePosition.x, Input.mousePosition.y) - _startTouch).normalized;
 
-            if (_swipeDelta.magnitude > .2f)
-            {
-                PlayerController.isMoving = true;
-            }
             StartCoroutine(MoveToTarget(_swipeDelta.x, _swipeDelta.y, speed, platformWidth * Math.Sign(_swipeDelta.x)));
             SetRotation();
         }
 
         if (Input.GetMouseButtonUp(0))
         {
-            PlayerController.isMoving = false;
+            print("hey");
             _swipeDelta = Vector2.zero;
             _pc.animator.SetTrigger(Idle);
         }
@@ -86,7 +83,7 @@ public class InputManager : MonoSingleton<InputManager>
         #endregion
     }
 
-    //This function uses MoveTowards property to move player in a constant speed.
+    //MoveToTarget uses MoveTowards property to move player in a constant speed.
     IEnumerator MoveToTarget(float xTarget, float zTarget, float speed, float limit)
     {
         Vector3 current = player.position;

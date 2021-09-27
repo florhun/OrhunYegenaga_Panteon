@@ -140,7 +140,6 @@ public class TexturePainter : MonoBehaviour
         }
 
         return false;
-
     }
 
     private Color[] colors;

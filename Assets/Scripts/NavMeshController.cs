@@ -12,7 +12,7 @@ public class NavMeshController : MonoBehaviour
     private Animator _anim;
     private Rigidbody _rb;
     public Transform startPoint;
-    
+
 
     private void Awake()
     {
@@ -41,12 +41,12 @@ public class NavMeshController : MonoBehaviour
         {
             transform.position = startPoint.position;
         }
-        
+
         if (other.transform.CompareTag("Stick"))
         {
             _rb.AddForce(Vector3.back * 1000, ForceMode.Force);
         }
-        
+
         if (other.transform.CompareTag("Donut"))
         {
             if (transform.position.x > 0)
@@ -58,10 +58,10 @@ public class NavMeshController : MonoBehaviour
                 _rb.AddForce(new Vector3(1, 0, -1) * 750, ForceMode.Force);
             }
         }
+
         if (other.transform.CompareTag("Finish"))
         {
             _anim.SetTrigger("Idle");
         }
-        
     }
 }

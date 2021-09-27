@@ -5,14 +5,16 @@ using System.Threading;
 using UnityEngine;
 using DG.Tweening;
 
+//Player Controller manages the player's task duties. Checks active collisions and communicates with other Manager scripts.
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float speed;
+    [SerializeField] private Rigidbody rb;
 
     public Animator animator;
-    [SerializeField] private Rigidbody rb;
-    public static bool isMoving;
     public List<Transform> startPoints = new List<Transform>();
+
+    private bool _inPlatform;
 
 
     private void FixedUpdate()
@@ -47,11 +49,17 @@ public class PlayerController : MonoBehaviour
             case GameManager.GameState.FinishGame:
                 break;
         }
+
+        if (_inPlatform)
+        {
+            MoveWithPlatform();
+        }
     }
 
     public void GameStart()
     {
         GameManager.instance.CurrentGameState = GameManager.GameState.Task1;
+        UIManager.instance.Task1();
     }
 
     private void OnCollisionEnter(Collision other)
@@ -63,7 +71,7 @@ public class PlayerController : MonoBehaviour
 
         if (other.transform.CompareTag("Platform"))
         {
-            CancelInvoke(nameof(MoveWithPlatform));
+            _inPlatform = false;
         }
 
         if (other.transform.CompareTag("Stick"))
@@ -87,13 +95,14 @@ public class PlayerController : MonoBehaviour
         {
             _currentPlatform = RP;
             transform.rotation = Quaternion.Euler(0, 0, -5 * transform.position.x);
-            InvokeRepeating(nameof(MoveWithPlatform), 1, 1);
+            _inPlatform = true;
         }
 
         if (other.transform.CompareTag("Task1"))
         {
             StartCoroutine(FinishFirstTask());
         }
+
         if (other.transform.CompareTag("FinishLine"))
         {
             GameManager.instance.CurrentGameState = GameManager.GameState.FinishGame;
@@ -106,6 +115,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator FinishFirstTask()
     {
         GameManager.instance.CurrentGameState = GameManager.GameState.Task2;
+        UIManager.instance.Task2();
         animator.SetTrigger("Idle");
         CameraManager.instance.BehindCam();
         yield return new WaitForSeconds(2f);
@@ -126,6 +136,7 @@ public class PlayerController : MonoBehaviour
         transform.DOMoveZ(165, 2, false);
         yield return new WaitForSeconds(2);
         GameManager.instance.CurrentGameState = GameManager.GameState.Task3;
+        UIManager.instance.Task3();
     }
 
     private int _count;
@@ -137,7 +148,6 @@ public class PlayerController : MonoBehaviour
         rb.velocity = Vector3.left * (_currentPlatform.dir * 2);
         rb.AddForce(Vector3.left * (_currentPlatform.dir * _currentPlatform.speed * 2f), ForceMode.Force);
         _count++;
-        //rb.AddTorque(Vector3.left, ForceMode.Impulse);
     }
 
 
